@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -95,7 +96,7 @@ fun AiMedicalChatScreen(
                         style = MaterialTheme.typography.bodySmall.copy(color = Color.White.copy(alpha = 0.9f))
                     )
                 }
-                Icon(Icons.Default.ArrowForward, contentDescription = null, tint = Color.White)
+                Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, tint = Color.White)
             }
         }
 
@@ -112,7 +113,7 @@ fun AiMedicalChatScreen(
                         inputText = pill
                     },
                     label = { Text(pill, fontSize = if (isEasyMode) 14.sp else 12.sp) },
-                    icon = { Icon(Icons.Default.HelpOutline, contentDescription = null, modifier = Modifier.size(14.dp)) }
+                    icon = { Icon(Icons.AutoMirrored.Filled.HelpOutline, contentDescription = null, modifier = Modifier.size(14.dp)) }
                 )
             }
         }
@@ -227,7 +228,7 @@ fun AiMedicalChatScreen(
                         .clip(CircleShape)
                         .background(MaterialTheme.colorScheme.primary)
                 ) {
-                    Icon(Icons.Default.Send, contentDescription = "Enviar", tint = Color.White)
+                    Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Enviar", tint = Color.White)
                 }
             }
         }

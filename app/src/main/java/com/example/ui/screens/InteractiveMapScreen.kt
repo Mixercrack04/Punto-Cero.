@@ -31,6 +31,9 @@ fun InteractiveMapScreen(
 ) {
     var selectedFilter by remember { mutableStateOf("Todos") }
     var showAddReportDialog by remember { mutableStateOf(false) }
+    var reportLocationName by remember { mutableStateOf("Corregimiento El Pescador, La Argentina (Huila)") }
+    var reportLat by remember { mutableDoubleStateOf(2.1865) }
+    var reportLng by remember { mutableDoubleStateOf(-75.8924) }
 
     val filterOptions = listOf("Todos", "Brotes/Casos", "Criaderos", "Centros Salud", "Farmacias")
 
@@ -79,7 +82,18 @@ fun InteractiveMapScreen(
                 reports = reports,
                 facilities = facilities,
                 selectedFilter = selectedFilter,
-                onAddReportClick = { showAddReportDialog = true },
+                onAddReportClick = {
+                    reportLocationName = "Corregimiento El Pescador, La Argentina (Huila)"
+                    reportLat = 2.1865
+                    reportLng = -75.8924
+                    showAddReportDialog = true
+                },
+                onAddReportAtLocation = { locationName, lat, lng ->
+                    reportLocationName = locationName
+                    reportLat = lat
+                    reportLng = lng
+                    showAddReportDialog = true
+                },
                 isEasyMode = isEasyMode
             )
 
@@ -137,17 +151,6 @@ fun InteractiveMapScreen(
                             style = MaterialTheme.typography.bodyMedium.copy(fontSize = 13.sp),
                             color = MaterialTheme.colorScheme.primary
                         )
-
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
-                        ) {
-                            Icon(Icons.Default.Phone, contentDescription = null, modifier = Modifier.size(16.dp), tint = MaterialTheme.colorScheme.secondary)
-                            Text(
-                                text = facility.phone,
-                                style = MaterialTheme.typography.labelMedium.copy(color = MaterialTheme.colorScheme.secondary)
-                            )
-                        }
                     }
                 }
             }
@@ -157,6 +160,9 @@ fun InteractiveMapScreen(
     // Add Report Modal Dialog
     if (showAddReportDialog) {
         AddReportModalDialog(
+            locationName = reportLocationName,
+            latitude = reportLat,
+            longitude = reportLng,
             onDismiss = { showAddReportDialog = false },
             onConfirm = { report ->
                 onAddReport(report)
@@ -168,11 +174,13 @@ fun InteractiveMapScreen(
 
 @Composable
 private fun AddReportModalDialog(
+    locationName: String,
+    latitude: Double,
+    longitude: Double,
     onDismiss: () -> Unit,
     onConfirm: (ReportEntity) -> Unit
 ) {
     var title by remember { mutableStateOf("") }
-    var locationName by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var reportType by remember { mutableStateOf("Criadero Detectado") }
     var severity by remember { mutableStateOf("Alto") }
@@ -185,30 +193,39 @@ private fun AddReportModalDialog(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
+                Surface(
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        modifier = Modifier.padding(10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Icon(Icons.Default.PinDrop, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                        Column {
+                            Text("📍 Ubicación Seleccionada", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                            Text(locationName, style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold), color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        }
+                    }
+                }
+
                 OutlinedTextField(
                     value = title,
                     onValueChange = { title = it },
                     label = { Text("Título del reporte") },
-                    placeholder = { Text("Ej: Charco en neumáticos abandonados") },
+                    placeholder = { Text("Ej: Tanque o caneca con larvas activas") },
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("input_report_title")
                 )
 
                 OutlinedTextField(
-                    value = locationName,
-                    onValueChange = { locationName = it },
-                    label = { Text("Ubicación / Dirección") },
-                    placeholder = { Text("Ej: Parque Comuna 4 - Sector Norte") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag("input_report_location")
-                )
-
-                OutlinedTextField(
                     value = description,
                     onValueChange = { description = it },
                     label = { Text("Descripción del foco o síntomas") },
+                    placeholder = { Text("Ej: Agua acumulada de lluvia en recipiente sin tapa") },
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -233,15 +250,15 @@ private fun AddReportModalDialog(
         confirmButton = {
             Button(
                 onClick = {
-                    if (title.isNotBlank() && locationName.isNotBlank()) {
+                    if (title.isNotBlank()) {
                         onConfirm(
                             ReportEntity(
                                 title = title,
                                 reportType = reportType,
                                 locationName = locationName,
-                                latitude = 4.6100,
-                                longitude = -74.0800,
-                                description = description.ifBlank { "Reporte registrado por ciudadano en la comunidad." },
+                                latitude = latitude,
+                                longitude = longitude,
+                                description = description.ifBlank { "Reporte registrado por la comunidad en $locationName." },
                                 severity = severity,
                                 status = "En Verificación"
                             )

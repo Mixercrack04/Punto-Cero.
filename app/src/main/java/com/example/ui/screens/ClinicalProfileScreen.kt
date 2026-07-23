@@ -176,13 +176,6 @@ fun ClinicalProfileScreen(
                     )
 
                     OutlinedTextField(
-                        value = emergencyPhone,
-                        onValueChange = { emergencyPhone = it },
-                        label = { Text("Teléfono de Contacto de Emergencia") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    OutlinedTextField(
                         value = cityZone,
                         onValueChange = { cityZone = it },
                         label = { Text("Barrio / Zona de Residencia") },

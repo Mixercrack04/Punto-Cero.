@@ -66,8 +66,8 @@ fun EducationScreen(
             Tab(
                 selected = selectedTab == 2,
                 onClick = { selectedTab = 2 },
-                text = { Text("Encuesta Web", fontWeight = FontWeight.Bold, fontSize = if (isEasyMode) 15.sp else 13.sp) },
-                icon = { Icon(Icons.Default.Quiz, contentDescription = null) }
+                text = { Text("Encuesta de Hogar", fontWeight = FontWeight.Bold, fontSize = if (isEasyMode) 15.sp else 13.sp) },
+                icon = { Icon(Icons.Default.HomeWork, contentDescription = null) }
             )
         }
 
@@ -254,46 +254,75 @@ private fun InteractiveSurveyTab(
         listOf(
             QuizQuestion(
                 id = 1,
-                question = "¿En qué tipo de agua prefiere poner sus huevos el mosquito del Dengue?",
+                question = "¿Cuántas personas viven en tu hogar y cuántas son vulnerables?",
                 options = listOf(
-                    "En agua estancada y limpia en recipientes artificiales",
-                    "En ríos de corriente rápida",
-                    "En lodo o tierra seca",
-                    "En agua salada del mar"
+                    "1 a 2 adultos (Bajo riesgo poblacional)",
+                    "3 a 5 personas con niños o adultos mayores (Riesgo Moderado)",
+                    "Más de 5 personas con bebés, niños o mujeres embarazadas (Riesgo Alto)"
                 ),
                 correctAnswerIndex = 0,
-                explanation = "Aedes aegypti busca depósitos de agua limpia estancada cerca de las viviendas."
+                explanation = "A mayor concentración de personas vulnerables, mayor es el impacto de una picadura infectada."
             ),
             QuizQuestion(
                 id = 2,
-                question = "¿Qué medicamento NO se debe tomar en caso de sospecha de Dengue?",
+                question = "¿Tienen tanques de agua, albercas o canecas abiertas en casa?",
                 options = listOf(
-                    "Ibuprofeno o Aspirina",
-                    "Acetaminofén / Paracetamol",
-                    "Suero de rehidratación oral",
-                    "Abundante agua"
+                    "No, todos los depósitos tienen tapa hermética o están bajo techo",
+                    "Sí, 1 o 2 albercas o tanques abiertos sin tapa",
+                    "Sí, varios tanques, canecas o barriles descubiertos con agua estancada"
                 ),
                 correctAnswerIndex = 0,
-                explanation = "El ibuprofeno y la aspirina aumentan el riesgo de hemorragias en el dengue."
+                explanation = "Los tanques sin tapa son el sitio #1 de reproducción del Aedes aegypti en el Huila."
             ),
             QuizQuestion(
                 id = 3,
-                question = "¿Cada cuántos días se debe lavar y cepillar tanques y albercas?",
+                question = "¿Con qué frecuencia cepillan y lavan las albercas y lavaderos?",
                 options = listOf(
-                    "Cada 4 a 5 días",
-                    "Una vez al año",
-                    "Cada 3 meses",
-                    "Nunca es necesario"
+                    "Cada semana sin falta con cepillo, jabón y cloro",
+                    "Cada 15 a 30 días o cuando se observa sucio",
+                    "Rara vez o nunca cepillamos las paredes internas del tanque"
                 ),
                 correctAnswerIndex = 0,
-                explanation = "El ciclo de larva a adulto toma 8-10 días; lavar cada 4 días destruye las larvas."
+                explanation = "El cepillado fuerte despega los huevos pegados a las paredes del estanque."
+            ),
+            QuizQuestion(
+                id = 4,
+                question = "¿Tienen floreros con agua, llantas o botellas en patios/jardines?",
+                options = listOf(
+                    "No, patio totalmente limpio, sin inservibles ni floreros con agua",
+                    "Sí, floreros con agua o algunos envases pequeños en el patio",
+                    "Sí, varias llantas, botellas o recipientes que acumulan agua de lluvia"
+                ),
+                correctAnswerIndex = 0,
+                explanation = "Llantas y floreros acumulan agua limpia donde eclosionan las larvas rápidamente."
+            ),
+            QuizQuestion(
+                id = 5,
+                question = "¿Cuentan con mallas (anjeos) en ventanas o mosquiteros (toldillos)?",
+                options = listOf(
+                    "Sí, mallas de anjeo en ventanas y toldillos en dormitorios",
+                    "Solo mallas en algunas ventanas pero sin toldillos",
+                    "No tenemos protección física contra mosquitos y entran libremente"
+                ),
+                correctAnswerIndex = 0,
+                explanation = "El uso de mallas físicas en ventanas y toldillos reduce en un 90% la picadura en casa."
+            ),
+            QuizQuestion(
+                id = 6,
+                question = "¿Alguien en la casa ha tenido fiebre o síntomas en los últimos 14 días?",
+                options = listOf(
+                    "Ninguno, todos los integrantes están sanos",
+                    "Sí, 1 persona con fiebre ligera o malestar",
+                    "Sí, 1 o más personas con fiebre alta (>38.5°C), sarpullido o dolor muscular"
+                ),
+                correctAnswerIndex = 0,
+                explanation = "Fiebre con dolor retroocular y manchas rojas requiere atención médica inmediata."
             )
         )
     }
 
     var selectedAnswers by remember { mutableStateOf(mapOf<Int, Int>()) }
     var isSubmitted by remember { mutableStateOf(false) }
-    var score by remember { mutableIntStateOf(0) }
 
     LazyColumn(
         modifier = Modifier
@@ -305,16 +334,22 @@ private fun InteractiveSurveyTab(
         item {
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
                 shape = RoundedCornerShape(16.dp)
             ) {
-                Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Icon(Icons.Default.HomeWork, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                        Text(
+                            text = "Encuesta Epidemiológica de Hogar y Prevención",
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                        )
+                    }
                     Text(
-                        text = "Encuesta de Concientización y Proyecto Escolar",
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
-                    )
-                    Text(
-                        text = "Responde las siguientes preguntas para validar tus conocimientos. Tienes ${surveysCompleted.size} encuestas registradas en el servidor.",
+                        text = "Responde acerca de los integrantes de tu vivienda y las condiciones de tu casa. Al finalizar, la app analizará los datos y te entregará consejos médicos y preventivos personalizados.",
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
@@ -337,14 +372,8 @@ private fun InteractiveSurveyTab(
 
                     q.options.forEachIndexed { idx, opt ->
                         val isSelected = selectedAnswers[q.id] == idx
-                        val isCorrect = q.correctAnswerIndex == idx
 
-                        val cardBg = when {
-                            isSubmitted && isCorrect -> Color(0xFFC8E6C9)
-                            isSubmitted && isSelected && !isCorrect -> Color(0xFFFFCDD2)
-                            isSelected -> MaterialTheme.colorScheme.primaryContainer
-                            else -> MaterialTheme.colorScheme.surfaceVariant
-                        }
+                        val cardBg = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant
 
                         Surface(
                             modifier = Modifier
@@ -377,13 +406,6 @@ private fun InteractiveSurveyTab(
                             }
                         }
                     }
-
-                    if (isSubmitted) {
-                        Text(
-                            text = "Explicación: ${q.explanation}",
-                            style = MaterialTheme.typography.labelMedium.copy(color = MaterialTheme.colorScheme.primary)
-                        )
-                    }
                 }
             }
         }
@@ -392,20 +414,17 @@ private fun InteractiveSurveyTab(
             if (!isSubmitted) {
                 Button(
                     onClick = {
-                        var totalScore = 0
-                        questions.forEach { q ->
-                            if (selectedAnswers[q.id] == q.correctAnswerIndex) {
-                                totalScore++
-                            }
-                        }
-                        score = totalScore
                         isSubmitted = true
 
-                        // Save result
+                        // Calculate risk score
+                        val totalRiskPoints = selectedAnswers.values.sum()
+                        val scoreToSave = 12 - totalRiskPoints
+
+                        // Save result to Room DB
                         onSaveSurveyResult(
                             SurveyEntity(
-                                title = "Encuesta Escolar sobre Dengue y Aedes",
-                                score = totalScore,
+                                title = "Encuesta Epidemiológica de Hogar",
+                                score = scoreToSave,
                                 totalQuestions = questions.size
                             )
                         )
@@ -413,40 +432,184 @@ private fun InteractiveSurveyTab(
                     enabled = selectedAnswers.size == questions.size,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(50.dp)
+                        .height(52.dp)
                         .testTag("btn_submit_survey"),
-                    shape = RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
-                    Text("Enviar Respuestas a la Web del Colegio", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    Icon(Icons.Default.Analytics, contentDescription = null)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Analizar Mi Hogar y Recibir Consejos", fontWeight = FontWeight.Bold, fontSize = 15.sp)
                 }
             } else {
+                val q1 = selectedAnswers[1] ?: 0
+                val q2 = selectedAnswers[2] ?: 0
+                val q3 = selectedAnswers[3] ?: 0
+                val q4 = selectedAnswers[4] ?: 0
+                val q5 = selectedAnswers[5] ?: 0
+                val q6 = selectedAnswers[6] ?: 0
+
+                val totalRiskPoints = q1 + q2 + q3 + q4 + q5 + q6
+                val riskLevel = when {
+                    totalRiskPoints <= 2 -> "RIESGO BAJO (Hogar Seguro)"
+                    totalRiskPoints <= 6 -> "RIESGO MODERADO"
+                    totalRiskPoints <= 9 -> "RIESGO ALTO"
+                    else -> "RIESGO CRÍTICO VECTORIAL"
+                }
+
+                val headerBg = when {
+                    totalRiskPoints <= 2 -> Color(0xFFC8E6C9)
+                    totalRiskPoints <= 6 -> Color(0xFFFFF9C4)
+                    totalRiskPoints <= 9 -> Color(0xFFFFE0B2)
+                    else -> Color(0xFFFFCDD2)
+                }
+
+                val headerText = when {
+                    totalRiskPoints <= 2 -> Color(0xFF1B5E20)
+                    totalRiskPoints <= 6 -> Color(0xFFF57F17)
+                    totalRiskPoints <= 9 -> Color(0xFFE65100)
+                    else -> Color(0xFFB71C1C)
+                }
+
                 Card(
                     modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                    shape = RoundedCornerShape(16.dp)
                 ) {
                     Column(
-                        modifier = Modifier.padding(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                        modifier = Modifier.padding(18.dp),
+                        verticalArrangement = Arrangement.spacedBy(14.dp)
                     ) {
-                        Icon(Icons.Default.Stars, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(40.dp))
+                        Surface(
+                            color = headerBg,
+                            shape = RoundedCornerShape(10.dp),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(12.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = "📊 Diagnóstico Epidemiológico de Tu Hogar",
+                                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
+                                    color = headerText
+                                )
+                                Text(
+                                    text = riskLevel,
+                                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Black),
+                                    color = headerText
+                                )
+                            }
+                        }
+
                         Text(
-                            text = "¡Encuesta Completada! Puntaje: $score / ${questions.size}",
-                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                            text = "💡 Consejos y Recomendaciones Personalizadas según tus respuestas:",
+                            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
+                            color = MaterialTheme.colorScheme.primary
                         )
-                        Text(
-                            text = "Tu certificado de concientización se ha guardado y sincronizado con el proyecto escolar.",
-                            style = MaterialTheme.typography.bodySmall
-                        )
+
+                        // Custom Advice 1: Water Tanks
+                        if (q2 > 0 || q3 > 0) {
+                            Card(
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.4f))
+                            ) {
+                                Row(modifier = Modifier.padding(12.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                                    Icon(Icons.Default.WaterDrop, contentDescription = null, tint = MaterialTheme.colorScheme.error)
+                                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                        Text("🚰 Acción en Tanques y Albercas", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelLarge)
+                                        Text(
+                                            "Tus albercas o tanques representan un potencial criadero. Cepilla las paredes internas con cepillo de cerda dura y jabón cada 5 días para desprender los huevos. Tapa herméticamente la alberca o solicita el producto larvicida BTI en la E.S.E. Hospital San Andrés de La Argentina.",
+                                            style = MaterialTheme.typography.bodySmall
+                                        )
+                                    }
+                                }
+                            }
+                        } else {
+                            Card(
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = CardDefaults.cardColors(containerColor = Color(0xFFE8F5E9))
+                            ) {
+                                Row(modifier = Modifier.padding(12.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                                    Icon(Icons.Default.CheckCircle, contentDescription = null, tint = Color(0xFF2E7D32))
+                                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                        Text("✅ Excelente Manejo de Depósitos de Agua", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelLarge, color = Color(0xFF2E7D32))
+                                        Text("Mantienes tus tanques sellados y limpios. Continúa revisando semanalmente que las tapas no tengan grietas por donde entren mosquitos.", style = MaterialTheme.typography.bodySmall, color = Color(0xFF1B5E20))
+                                    }
+                                }
+                            }
+                        }
+
+                        // Custom Advice 2: Outdoor Items
+                        if (q4 > 0) {
+                            Card(
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f))
+                            ) {
+                                Row(modifier = Modifier.padding(12.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                                    Icon(Icons.Default.DeleteSweep, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                        Text("🌺 Saneamiento del Patio y Floreros", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelLarge)
+                                        Text(
+                                            "Reemplaza el agua de floreros por tierra o arena húmeda. Revisa llantas, botellas y latas en el patio: voltéalas boca abajo o entrégalas en la Jornada de Limpieza de la I.E. El Pescador.",
+                                            style = MaterialTheme.typography.bodySmall
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
+                        // Custom Advice 3: Physical Protection
+                        if (q5 > 0) {
+                            Card(
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f))
+                            ) {
+                                Row(modifier = Modifier.padding(12.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                                    Icon(Icons.Default.Shield, contentDescription = null, tint = MaterialTheme.colorScheme.secondary)
+                                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                        Text("🛏️ Protección Física en Ventanas y Cuartos", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelLarge)
+                                        Text(
+                                            "Dado que los mosquitos pican principalmente al amanecer y atardecer, instala mallas o anjeos finos en ventanas. Para niños y adultos mayores, prioriza el uso de toldillos mosquiteros al dormir.",
+                                            style = MaterialTheme.typography.bodySmall
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
+                        // Custom Advice 4: Symptoms & Medical
+                        if (q6 > 0) {
+                            Card(
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = CardDefaults.cardColors(containerColor = Color(0xFFFFEBEE))
+                            ) {
+                                Row(modifier = Modifier.padding(12.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                                    Icon(Icons.Default.LocalHospital, contentDescription = null, tint = Color(0xFFC62828))
+                                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                        Text("🩺 ALERTA MÉDICA SINTOMÁTICA", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelLarge, color = Color(0xFFC62828))
+                                        Text(
+                                            "Has reportado integrantes con síntoma febril. Acude inmediatamente a la E.S.E. Hospital San Andrés de La Argentina o al Puesto de Salud El Pescador. Ofrece abundante suero oral SRO. PROHIBIDO tomar Ibuprofeno, Aspirina o Naproxeno por alto riesgo de hemorragia.",
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = Color(0xFF8E0000)
+                                        )
+                                    }
+                                }
+                            }
+                        }
 
                         Button(
                             onClick = {
                                 isSubmitted = false
                                 selectedAnswers = emptyMap()
                             },
+                            modifier = Modifier.fillMaxWidth(),
                             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                         ) {
-                            Text("Reintentar Encuesta")
+                            Icon(Icons.Default.Refresh, contentDescription = null)
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text("Realizar Nueva Encuesta de Hogar")
                         }
                     }
                 }

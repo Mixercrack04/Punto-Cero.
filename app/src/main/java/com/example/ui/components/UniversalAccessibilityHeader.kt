@@ -93,23 +93,6 @@ fun UniversalAccessibilityHeader(
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // WhatsApp Quick Call Button
-                    IconButton(
-                        onClick = onOpenWhatsApp,
-                        modifier = Modifier
-                            .testTag("btn_whatsapp_quick")
-                            .size(if (isEasyMode) 48.dp else 40.dp)
-                            .clip(CircleShape)
-                            .background(Color(0xFF25D366))
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Phone,
-                            contentDescription = "WhatsApp Médico",
-                            tint = Color.White,
-                            modifier = Modifier.size(if (isEasyMode) 26.dp else 20.dp)
-                        )
-                    }
-
                     // Alerts Badge Button
                     IconButton(
                         onClick = onOpenAlerts,
@@ -140,31 +123,6 @@ fun UniversalAccessibilityHeader(
                         }
                     }
 
-                    // Easy Mode Toggle
-                    FilterChip(
-                        selected = isEasyMode,
-                        onClick = onToggleEasyMode,
-                        label = {
-                            Text(
-                                text = if (isEasyMode) "Modo Fácil ON" else "Accesibilidad",
-                                fontSize = if (isEasyMode) 13.sp else 11.sp
-                            )
-                        },
-                        leadingIcon = {
-                            Icon(
-                                imageVector = if (isEasyMode) Icons.Default.Visibility else Icons.Default.AccessibilityNew,
-                                contentDescription = "Modo Accesible",
-                                modifier = Modifier.size(16.dp)
-                            )
-                        },
-                        modifier = Modifier.testTag("toggle_easy_mode"),
-                        colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-                            selectedLabelColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                            containerColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.2f),
-                            labelColor = MaterialTheme.colorScheme.onPrimary
-                        )
-                    )
                 }
             }
         }

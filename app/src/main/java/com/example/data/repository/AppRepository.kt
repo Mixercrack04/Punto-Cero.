@@ -32,102 +32,113 @@ class AppRepository(private val dao: AppDao) {
     }
 
     suspend fun initializeDefaultDataIfEmpty() {
-        if (dao.getFacilityCount() == 0) {
-            val initialProfile = UserProfileEntity(
-                id = 1,
-                fullName = "María Fernanda Gómez",
-                ageGroup = "Joven / Adulto",
-                bloodType = "O+",
-                chronicConditions = "Ninguna",
-                allergies = "Polen",
-                pastInfections = "Dengue leve (2023)",
-                emergencyPhone = "+57 312 987 6543",
-                cityZone = "Comuna 4 - Sector Norte",
-                isEasyModeActive = false,
-                isEncryptedAtRest = true
-            )
-            dao.saveUserProfile(initialProfile)
+        val initialProfile = UserProfileEntity(
+            id = 1,
+            fullName = "María Fernanda Gómez",
+            ageGroup = "Joven / Estudiante",
+            bloodType = "O+",
+            chronicConditions = "Ninguna",
+            allergies = "Polen",
+            pastInfections = "Dengue leve (SIVIGILA Huila 2023)",
+            emergencyPhone = "+57 312 987 6543",
+            cityZone = "Corregimiento El Pescador, La Argentina (Huila)",
+            isEasyModeActive = false,
+            isEncryptedAtRest = true
+        )
+        dao.saveUserProfile(initialProfile)
 
-            val initialFacilities = listOf(
-                HealthFacilityEntity(
-                    name = "Centro de Salud Comunitario San José",
-                    facilityType = "Centro de Salud",
-                    address = "Av. Principal # 12-45",
-                    latitude = 4.6097,
-                    longitude = -74.0817,
-                    phone = "+57 601 555 0101",
-                    availableMeds = "Paracetamol 500mg, Suero Oral, Sales de Rehidratación, Repelente",
-                    isOpen24h = true
-                ),
-                HealthFacilityEntity(
-                    name = "Hospital Infantil Santa Sofía",
-                    facilityType = "Hospital",
-                    address = "Calle 45 # 23-10",
-                    latitude = 4.6150,
-                    longitude = -74.0750,
-                    phone = "+57 601 555 0202",
-                    availableMeds = "Atención de Emergencia Dengue, Pruebas Rápidas NS1, Acetaminofén jarabe",
-                    isOpen24h = true
-                ),
-                HealthFacilityEntity(
-                    name = "Farmacia Sanitaria San Gabriel",
-                    facilityType = "Farmacia",
-                    address = "Carrera 15 # 8-30",
-                    latitude = 4.6020,
-                    longitude = -74.0880,
-                    phone = "+57 601 555 0303",
-                    availableMeds = "Repelente DEET 20%, Mosquiteros, Paracetamol, Termómetros digitales",
-                    isOpen24h = false
-                ),
-                HealthFacilityEntity(
-                    name = "Puesto de Vacunación y Control Sanitario",
-                    facilityType = "Punto Vacunación",
-                    address = "Plaza Principal - Módulo 3",
-                    latitude = 4.6180,
-                    longitude = -74.0850,
-                    phone = "+57 601 555 0404",
-                    availableMeds = "Insumos de Fumigación, Kits de Abate para agua, Guías Preventivas",
-                    isOpen24h = false
-                )
+        // Always re-populate facilities with real authentic data for La Argentina & El Pescador, Huila
+        dao.clearFacilities()
+        val realFacilities = listOf(
+            HealthFacilityEntity(
+                name = "E.S.E. Hospital San Andrés de La Argentina",
+                facilityType = "Hospital Municipal (Nivel I)",
+                address = "Carrera 4 # 5-20, La Argentina, Huila",
+                latitude = 2.1865,
+                longitude = -75.8924,
+                phone = "+57 608 837 1020",
+                availableMeds = "Urgencias 24h, Pruebas Rápidas NS1 Dengue, Acetaminofén 500mg, Suero Oral SRO",
+                isOpen24h = true
+            ),
+            HealthFacilityEntity(
+                name = "Puesto de Salud El Pescador",
+                facilityType = "Centro de Salud Rural",
+                address = "Corregimiento El Pescador, La Argentina, Huila",
+                latitude = 2.1950,
+                longitude = -75.8850,
+                phone = "+57 608 837 1100",
+                availableMeds = "Toma de Muestras de Sangre, Acetaminofén Jarabe, Sales de Rehidratación Oral, Kits Preventivos",
+                isOpen24h = true
+            ),
+            HealthFacilityEntity(
+                name = "Droguería La Rebaja / Emcofarma La Argentina",
+                facilityType = "Farmacia Principal",
+                address = "Calle 5 # 4-18, Parque Principal, La Argentina, Huila",
+                latitude = 2.1880,
+                longitude = -75.8910,
+                phone = "+57 311 500 2030",
+                availableMeds = "Repelente DEET 20-30%, Mosquiteros Impregnados, Termómetros Digitales, Paracetamol 500mg",
+                isOpen24h = false
+            ),
+            HealthFacilityEntity(
+                name = "Droguería Central La Argentina",
+                facilityType = "Farmacia Autorizada",
+                address = "Carrera 3 # 4-32, La Argentina, Huila",
+                latitude = 2.1870,
+                longitude = -75.8930,
+                phone = "+57 312 456 7890",
+                availableMeds = "Acetaminofén, Sales de Rehidratación Oral (SRO), Suero Pedialyte, Repelente para Niños",
+                isOpen24h = false
+            ),
+            HealthFacilityEntity(
+                name = "Secretaría de Salud Huila - Puesto SIVIGILA La Argentina",
+                facilityType = "Punto Control Sanitario",
+                address = "Alcaldía Municipal, La Argentina, Huila",
+                latitude = 2.1850,
+                longitude = -75.8940,
+                phone = "+57 608 867 0101",
+                availableMeds = "Larvicida BTI / Abate granulado para tanques, Equipos de Termonebulización Aedes aegypti",
+                isOpen24h = false
             )
-            dao.insertFacilities(initialFacilities)
+        )
+        dao.insertFacilities(realFacilities)
 
             val initialReports = listOf(
                 ReportEntity(
-                    title = "Charco acumulado en llantas abandonadas",
+                    title = "Tanque de reserva con larvas visibles de Aedes aegypti",
                     reportType = "Criadero Detectado",
-                    locationName = "Parque del Barrio La Esperanza",
-                    latitude = 4.6090,
-                    longitude = -74.0820,
-                    description = "Se observan larvas activas de mosquito en agua estancada dentro de neumáticos.",
+                    locationName = "Patio Central - I.E. El Pescador, La Argentina (Huila)",
+                    latitude = 2.1868,
+                    longitude = -75.8920,
+                    description = "Estudiantes observaron larvas en movimiento rápido en agua almacenada sin tapa. Se requiere lavado con cepillo y aplicación de abate.",
                     severity = "Alto",
                     status = "En Verificación",
                     timestamp = System.currentTimeMillis() - 3600000 * 4,
-                    reportedBy = "Carlos Ruiz (Vecino)"
+                    reportedBy = "Abel Andrés Chavez Penagos (I.E. El Pescador)"
                 ),
                 ReportEntity(
-                    title = "Posible caso síntoma febril",
+                    title = "SIVIGILA: Caso sospechoso de Dengue con signos de alarma",
                     reportType = "Caso Dengue/Zika",
-                    locationName = "Sector Los Pinos - Bloque 3",
-                    latitude = 4.6120,
-                    longitude = -74.0790,
-                    description = "Persona presenta fiebre alta de 39°C, sarpullido y dolor muscular.",
+                    locationName = "Barrio El Carmen - La Argentina, Huila",
+                    latitude = 2.1855,
+                    longitude = -75.8935,
+                    description = "Paciente febril con 39.2°C, petequias y mialgias intensas. Atendido en E.S.E. Hospital San Andrés de La Argentina.",
                     severity = "Crítico",
                     status = "Atendido",
                     timestamp = System.currentTimeMillis() - 3600000 * 12,
-                    reportedBy = "Comité de Salud"
+                    reportedBy = "Jarol Felipe Quilindo Méndez (Comité Salud)"
                 ),
                 ReportEntity(
-                    title = "Jornada de fumigación realizada",
+                    title = "Jornada de Termonebulización y Control Biológico",
                     reportType = "Zona Fumigada",
-                    locationName = "Escuela Distrital Simón Bolívar",
-                    latitude = 4.6050,
-                    longitude = -74.0860,
-                    description = "Personal de salud pública aplicó nebulización en áreas verdes y aulas.",
+                    locationName = "Corregimiento El Pescador - Zona Escolar",
+                    latitude = 2.1910,
+                    longitude = -75.8880,
+                    description = "Fumigación térmica realizada por la Secretaría de Salud del Huila y la brigada de salud de la I.E. El Pescador.",
                     severity = "Bajo",
                     status = "Atendido",
                     timestamp = System.currentTimeMillis() - 3600000 * 24,
-                    reportedBy = "Secretaría de Salud"
+                    reportedBy = "Luis Gabriel Bravo Manquillo (Secretaría Escolar)"
                 )
             )
             for (r in initialReports) {
@@ -136,26 +147,26 @@ class AppRepository(private val dao: AppDao) {
 
             val initialAlerts = listOf(
                 HealthAlertEntity(
-                    title = "🌧️ Alerta Preventiva: Temporada de Lluvias",
-                    message = "Se pronostican precipitaciones intensas esta semana. Revise y vacíe floreros, macetas y recipientes descubiertos.",
-                    category = "Clima / Lluvia",
-                    zone = "Toda la zona urbana",
+                    title = "🚨 Boletín SIVIGILA Huila: Alerta Epidemiológica Dengue",
+                    message = "La Secretaría de Salud del Huila informa alta circulación del vector Aedes aegypti por clima cálido húmedo (28°C-32°C). Cepille y lave tanques cada 7 días.",
+                    category = "Alerta Epidemiológica",
+                    zone = "Huila - Municipio de La Argentina",
                     timestamp = System.currentTimeMillis() - 1800000,
                     isRead = false
                 ),
                 HealthAlertEntity(
-                    title = "🚜 Jornada de Nebulización Programada",
-                    message = "El equipo de control vectorial estará fumigando mañana a las 6:00 AM en el Sector Norte. Mantenga ventanas cerradas.",
-                    category = "Jornada Fumigación",
-                    zone = "Sector Norte y Los Pinos",
+                    title = "📢 Jornada Escolar de Limpieza e Inservibles I.E. El Pescador",
+                    message = "Organizada por Abel Chavez, Jarol Quilindo y Luis Bravo. Se recolectarán llantas, botellas y floreros para erradicar focos de zancudos.",
+                    category = "Prevención Escolar",
+                    zone = "Corregimiento El Pescador",
                     timestamp = System.currentTimeMillis() - 3600000 * 8,
                     isRead = false
                 ),
                 HealthAlertEntity(
-                    title = "💊 Disponibilidad de Paracetamol y Repelentes",
-                    message = "Se han reabastecido los centros de salud locales con suero de rehidratación y paracetamol sin costo.",
-                    category = "Medicamentos",
-                    zone = "Centro de Salud San José",
+                    title = "💊 Disponibilidad de Acetaminofén y Suero Oral SRO",
+                    message = "El Hospital San Andrés de La Argentina cuenta con stock completo de sales de rehidratación oral y acetaminofén. Prohibido el uso de AINEs.",
+                    category = "Suministros Médicos",
+                    zone = "E.S.E. Hospital San Andrés",
                     timestamp = System.currentTimeMillis() - 3600000 * 18,
                     isRead = true
                 )
@@ -163,6 +174,5 @@ class AppRepository(private val dao: AppDao) {
             for (a in initialAlerts) {
                 dao.insertAlert(a)
             }
-        }
     }
 }

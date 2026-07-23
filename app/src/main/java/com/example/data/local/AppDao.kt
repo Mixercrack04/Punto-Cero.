@@ -43,6 +43,9 @@ interface AppDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFacilities(facilities: List<HealthFacilityEntity>)
 
+    @Query("DELETE FROM health_facilities")
+    suspend fun clearFacilities()
+
     @Query("SELECT COUNT(*) FROM health_facilities")
     suspend fun getFacilityCount(): Int
 }

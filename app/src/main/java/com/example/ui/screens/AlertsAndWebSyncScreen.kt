@@ -22,10 +22,6 @@ import com.example.data.local.HealthAlertEntity
 import java.text.SimpleDateFormat
 import java.util.*
 
-import android.webkit.WebView
-import android.webkit.WebViewClient
-import androidx.compose.ui.viewinterop.AndroidView
-
 @Composable
 fun AlertsAndWebSyncScreen(
     isEasyMode: Boolean,
@@ -33,7 +29,6 @@ fun AlertsAndWebSyncScreen(
     onMarkRead: (Int) -> Unit
 ) {
     val dateFormat = remember { SimpleDateFormat("HH:mm - dd/MM/yyyy", Locale.getDefault()) }
-    var showWebViewDialog by remember { mutableStateOf(false) }
 
     LazyColumn(
         modifier = Modifier
@@ -90,7 +85,7 @@ fun AlertsAndWebSyncScreen(
                         }
                     }
 
-                    Divider(color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.15f))
+                    HorizontalDivider(color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.15f))
 
                     Text(
                         text = "👨‍🎓 Presentado por:\nAbel Andrés Chavez Penagos, Jarol Felipe Quilindo Méndez y Luis Gabriel Bravo Manquillo",
@@ -115,67 +110,6 @@ fun AlertsAndWebSyncScreen(
                                 color = Color(0xFF2E7D32)
                             )
                         }
-                    }
-
-                    Button(
-                        onClick = { showWebViewDialog = true },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .testTag("btn_open_web_app_portal"),
-                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-                    ) {
-                        Icon(Icons.Default.Language, contentDescription = null, modifier = Modifier.size(18.dp))
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("💻 Probar Portal Web PC (HTML5 Interactivo)", fontWeight = FontWeight.Bold)
-                    }
-
-                    if (showWebViewDialog) {
-                        AlertDialog(
-                            onDismissRequest = { showWebViewDialog = false },
-                            modifier = Modifier.fillMaxWidth(0.98f),
-                            title = {
-                                Column {
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                                    ) {
-                                        Icon(Icons.Default.Language, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
-                                        Text("Portal Web Oficial - Punto Cero PC", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold))
-                                    }
-                                    Text(
-                                        text = "Institución Educativa El Pescador",
-                                        style = MaterialTheme.typography.labelSmall,
-                                        color = MaterialTheme.colorScheme.primary,
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                }
-                            },
-                            text = {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(420.dp)
-                                        .clip(RoundedCornerShape(8.dp))
-                                ) {
-                                    AndroidView(
-                                        factory = { context ->
-                                            WebView(context).apply {
-                                                settings.javaScriptEnabled = true
-                                                settings.domStorageEnabled = true
-                                                webViewClient = WebViewClient()
-                                                loadUrl("file:///android_asset/punto_cero_web.html")
-                                            }
-                                        },
-                                        modifier = Modifier.fillMaxSize()
-                                    )
-                                }
-                            },
-                            confirmButton = {
-                                Button(onClick = { showWebViewDialog = false }) {
-                                    Text("Cerrar Vista Web")
-                                }
-                            }
-                        )
                     }
                 }
             }
