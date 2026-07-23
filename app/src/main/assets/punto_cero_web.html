@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Punto Cero - Institución Educativa El Pescador</title>
+    <style>
+        :root {
+            --primary: #0D3B3E;
+            --primary-light: #185A5E;
+            --accent: #FF6B35;
+            --bg: #F4F7F6;
+            --card-bg: #FFFFFF;
+            --text: #2D3748;
+            --text-muted: #718096;
+            --success: #2E7D32;
+            --danger: #C62828;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 20px 10%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+            border: 3px solid var(--accent);
+        }
+
+        .header-title h1 {
+            font-size: 1.6rem;
+            letter-spacing: 0.5px;
+        }
+
+        .header-title p {
+            font-size: 0.85rem;
+            color: #A0AEC0;
+        }
+
+        .authors-badge {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 8px 14px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+            font-size: 0.8rem;
+            max-width: 450px;
+        }
+
+        nav {
+            background-color: var(--primary-light);
+            padding: 10px 10%;
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+
+        nav a:hover, nav a.active {
+            background-color: var(--accent);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        .hero h2 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1f));
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            border: 1px solid #E2E8F0;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #EDF2F7;
+            padding-bottom: 10px;
+        }
+
+        .card-header h3 {
+            color: var(--primary);
+            font-size: 1.3rem;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #CBD5E0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--primary);
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-light);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-accent {
+            background-color: var(--accent);
+        }
+
+        .btn-accent:hover {
+            background-color: #E05A2B;
+        }
+
+        .report-item {
+            background-color: #F8FAFC;
+            border-left: 4px solid var(--accent);
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        .report-item h4 {
+            color: var(--primary);
+            font-size: 1rem;
+        }
+
+        .report-item p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .chat-box {
+            height: 250px;
+            overflow-y: auto;
+            border: 1px solid #E2E8F0;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #FAFAFA;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+        }
+
+        .message.bot {
+            background-color: #E2E8F0;
+            color: var(--text);
+            align-self: flex-start;
+        }
+
+        .message.user {
+            background-color: var(--primary);
+            color: white;
+            align-self: flex-end;
+        }
+
+        footer {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 50px;
+            font-size: 0.9rem;
+        }
+
+        footer strong {
+            color: var(--accent);
+        }
+
+        .quiz-option {
+            background-color: #EDF2F7;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .quiz-option:hover {
+            background-color: #E2E8F0;
+        }
+
+        .quiz-option.selected {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .feedback-box {
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+
+        .feedback-correct {
+            background-color: #C8E6C9;
+            color: #1B5E20;
+        }
+
+        .feedback-incorrect {
+            background-color: #FFCDD2;
+            color: #B71C1C;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <div class="logo-icon">PC</div>
+            <div class="header-title">
+                <h1>Punto Cero</h1>
+                <p>Institución Educativa El Pescador</p>
+            </div>
+        </div>
+        <div class="authors-badge">
+            <strong>👨‍🎓 Autores y Desarrolladores del Proyecto:</strong><br>
+            Abel Andrés Chavez Penagos • Jarol Felipe Quilindo Méndez • Luis Gabriel Bravo Manquillo
+        </div>
+    </header>
+
+    <nav>
+        <a href="#inicio" class="active">Inicio PC</a>
+        <a href="#focos">Reportar Criadero</a>
+        <a href="#encuesta">Encuesta Educativa</a>
+        <a href="#ia">Dr. Zancudo IA</a>
+        <a href="#alertas">Alertas Comunitarias</a>
+    </nav>
+
+    <div class="container" id="inicio">
+        <div class="hero">
+            <h2>Portal Web Oficial - Punto Cero</h2>
+            <p>Plataforma web comunitaria diseñada para computadores y dispositivos sin la app móvil. Registra criaderos de mosquitos <i>Aedes aegypti</i>, responde encuestas de prevención y consulta al asistente virtual.</p>
+            <button class="btn btn-accent" style="width: auto;" onclick="document.getElementById('focos').scrollIntoView();">📍 Reportar un Foco Ahora</button>
+        </div>
+
+        <div class="grid-layout">
+            <!-- Columna 1: Reporte de Focos desde PC -->
+            <div class="card" id="focos">
+                <div class="card-header">
+                    <span>📍</span>
+                    <h3>Reportar Criadero (Web PC)</h3>
+                </div>
+                <form id="focusForm">
+                    <div class="form-group">
+                        <label for="location">Ubicación / Barrio / Sede:</label>
+                        <input type="text" id="location" placeholder="Ej: Patio Sede Principal El Pescador" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="risk">Nivel de Riesgo Observado:</label>
+                        <select id="risk">
+                            <option value="Alto">Alto (Agua con larvas visibles)</option>
+                            <option value="Medio">Medio (Depósito destapado)</option>
+                            <option value="Bajo">Bajo (Llantas / Floreros secos)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Detalles del Criadero:</label>
+                        <textarea id="description" rows="3" placeholder="Ej: Tanque de agua estancada sin tapa cerca a las aulas..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn">Enviar Registro al Servidor Escolar</button>
+                </form>
+
+                <h4 style="margin-top: 20px; margin-bottom: 10px;">📋 Focos Mapeados en Tiempo Real:</h4>
+                <div id="reportsList">
+                    <!-- Dynamic reports -->
+                </div>
+            </div>
+
+            <!-- Columna 2: Encuesta Educativa Web -->
+            <div class="card" id="encuesta">
+                <div class="card-header">
+                    <span>📝</span>
+                    <h3>Encuesta de Prevención</h3>
+                </div>
+                <p style="font-size: 0.9rem; margin-bottom: 15px;">Demuestra tus conocimientos para proteger a la comunidad educativa:</p>
+                
+                <div id="quizContainer">
+                    <p><strong>Pregunta:</strong> ¿Cada cuántos días se debe lavar y cepillar con detergente los tanques y albercas para prevenir huevos de mosquito?</p>
+                    <div style="margin-top: 10px;">
+                        <div class="quiz-option" onclick="selectQuiz(0, this)">A) Cada 30 días o un mes</div>
+                        <div class="quiz-option" onclick="selectQuiz(1, this)">B) Cada 7 u 8 días como máximo</div>
+                        <div class="quiz-option" onclick="selectQuiz(2, this)">C) Solo cuando el agua huela mal</div>
+                    </div>
+                    <button class="btn btn-accent" style="margin-top: 15px;" onclick="checkQuiz()">Enviar Respuesta Web</button>
+                    <div id="quizFeedback"></div>
+                </div>
+            </div>
+
+            <!-- Columna 3: Dr. Zancudo IA Web -->
+            <div class="card" id="ia">
+                <div class="card-header">
+                    <span>🤖</span>
+                    <h3>Asistente Virtual Dr. Zancudo</h3>
+                </div>
+                <div class="chat-box" id="chatBox">
+                    <div class="message bot">
+                        Hola, bienvenido al portal web de <strong>Punto Cero</strong> de la I.E. El Pescador. ¿Tienes dudas sobre los síntomas del Dengue o cómo eliminar los zancudos?
+                    </div>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" id="chatInput" placeholder="Escribe tu consulta..." style="flex: 1; padding: 8px 12px; border-radius: 6px; border: 1px solid #CBD5E0;">
+                    <button class="btn" style="width: auto; padding: 8px 16px;" onclick="sendChatMessage()">Consultar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alertas comunitarias -->
+        <div class="card" id="alertas" style="margin-top: 30px;">
+            <div class="card-header">
+                <span>🔔</span>
+                <h3>Comunicados y Alertas - Institución Educativa El Pescador</h3>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <div style="background-color: #E3F2FD; padding: 12px; border-radius: 8px; border-left: 4px solid #1E88E5;">
+                    <strong>📢 Jornada de Recolección de Inservibles</strong>
+                    <p style="font-size: 0.85rem; color: var(--text);">Este viernes se realizará la limpieza escolar en la I.E. El Pescador. Traer guantes y bolsas.</p>
+                </div>
+                <div style="background-color: #FFF3E0; padding: 12px; border-radius: 8px; border-left: 4px solid #FB8C00;">
+                    <strong>🌧️ Alerta por Lluvias Recientes</strong>
+                    <p style="font-size: 0.85rem; color: var(--text);">Inspecione los patios y reemplace el agua de floreros por tierra o arena húmeda.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p><strong>Punto Cero</strong> &copy; 2026 - Institución Educativa El Pescador</p>
+        <p style="margin-top: 5px; opacity: 0.8;">Proyecto de Prevención y Salud Común presentado por Abel Andrés Chavez Penagos, Jarol Felipe Quilindo Méndez y Luis Gabriel Bravo Manquillo.</p>
+    </footer>
+
+    <script>
+        // Sample initial reports stored in LocalStorage or state
+        let reports = JSON.parse(localStorage.getItem('punto_cero_reports')) || [
+            { location: 'Patio Central - I.E. El Pescador', risk: 'Alto', desc: 'Llantas acumulando agua de lluvia' },
+            { location: 'Barrio El Carmen - Cerca al colegio', risk: 'Medio', desc: 'Floreros destapados en tumbas/jardines' }
+        ];
+
+        function renderReports() {
+            const list = document.getElementById('reportsList');
+            list.innerHTML = '';
+            reports.forEach((r, idx) => {
+                const item = document.createElement('div');
+                item.className = 'report-item';
+                item.innerHTML = `
+                    <h4>📍 ${r.location} <span style="font-size: 0.75rem; color: #C62828;">[Riesgo ${r.risk}]</span></h4>
+                    <p>${r.desc}</p>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        document.getElementById('focusForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const loc = document.getElementById('location').value;
+            const risk = document.getElementById('risk').value;
+            const desc = document.getElementById('description').value;
+
+            reports.unshift({ location: loc, risk: risk, desc: desc });
+            localStorage.setItem('punto_cero_reports', JSON.stringify(reports));
+            renderReports();
+
+            document.getElementById('focusForm').reset();
+            alert('✅ ¡Reporte enviado con éxito al servidor escolar!');
+        });
+
+        renderReports();
+
+        // Quiz Logic
+        let selectedOption = -1;
+        function selectQuiz(index, el) {
+            selectedOption = index;
+            document.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        function checkQuiz() {
+            const feedback = document.getElementById('quizFeedback');
+            if (selectedOption === -1) {
+                alert('Por favor selecciona una opción antes de responder.');
+                return;
+            }
+            if (selectedOption === 1) {
+                feedback.className = 'feedback-box feedback-correct';
+                feedback.innerHTML = '🎉 ¡Excelente! Se debe cepillar cada 7 a 8 días para destruir los huevos adheridos a las paredes del recipiente.';
+            } else {
+                feedback.className = 'feedback-box feedback-incorrect';
+                feedback.innerHTML = '❌ Incorrecto. La respuesta adecuada es cada 7 a 8 días, ya que el huevo del mosquito eclosiona rápido en clima cálido.';
+            }
+        }
+
+        // Chatbot logic
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const query = input.value.trim();
+            if (!query) return;
+
+            const chatBox = document.getElementById('chatBox');
+
+            // Add User Message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message user';
+            userMsg.innerText = query;
+            chatBox.appendChild(userMsg);
+
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // Generate Bot response
+            setTimeout(() => {
+                const botMsg = document.createElement('div');
+                botMsg.className = 'message bot';
+                
+                const lower = query.toLowerCase();
+                if (lower.includes('sintoma') || lower.includes('fiebre') || lower.includes('dengue')) {
+                    botMsg.innerHTML = '🩺 <strong>Respuesta Dr. Zancudo:</strong> Los síntomas principales del Dengue incluyen fiebre alta repentina, dolor detrás de los ojos, dolor muscular y articular. ¡No te automediques con ibuprofeno ni aspirina, consulta al puesto de salud!';
+                } else if (lower.includes('preven') || lower.includes('evitar') || lower.includes('zancudo')) {
+                    botMsg.innerHTML = '🛡️ <strong>Respuesta Dr. Zancudo:</strong> Elimina todos los recipientes inservibles que acumulen agua, usa repelente con DEET, instala mosquiteros en las ventanas y lava las albercas periódicamente.';
+                } else {
+                    botMsg.innerHTML = `🤖 <strong>Respuesta Dr. Zancudo:</strong> Gracias por tu consulta sobre "${query}". En la Institución Educativa El Pescador trabajamos juntos para erradicar el Aedes aegypti. Visita al puesto de salud si presentas malestar severo.`;
+                }
+
+                chatBox.appendChild(botMsg);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 600);
+        }
+    </script>
+</body>
+</html>

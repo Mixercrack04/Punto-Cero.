@@ -1,0 +1,6 @@
+{
+  "name": "Punto Cero",
+  "description": "Plataforma de concientización sobre zancudos, mapas de brotes en tiempo real, encuestas educativas, soporte de IA médica, historial clínico y alertas de prevención.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
