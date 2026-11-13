@@ -62,7 +62,11 @@ fun MosquiAlertaApp(repository: AppRepository) {
     val alerts by repository.alerts.collectAsStateWithLifecycle(initialValue = emptyList())
     val facilities by repository.healthFacilities.collectAsStateWithLifecycle(initialValue = emptyList())
 
-    var isEasyMode by remember { mutableStateOf(userProfile?.isEasyModeActive ?: false) }
+    var isEasyMode by remember { mutableStateOf(false) }
+    // The profile loads asynchronously; sync the saved preference once it arrives.
+    LaunchedEffect(userProfile?.isEasyModeActive) {
+        userProfile?.let { isEasyMode = it.isEasyModeActive }
+    }
     var currentTab by remember { mutableIntStateOf(0) }
 
     val unreadAlertsCount = remember(alerts) { alerts.count { !it.isRead } }

@@ -9,6 +9,9 @@ interface AppDao {
     @Query("SELECT * FROM user_profiles WHERE id = 1 LIMIT 1")
     fun getUserProfile(): Flow<UserProfileEntity?>
 
+    @Query("SELECT * FROM user_profiles WHERE id = 1 LIMIT 1")
+    suspend fun getUserProfileOnce(): UserProfileEntity?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveUserProfile(profile: UserProfileEntity)
 
